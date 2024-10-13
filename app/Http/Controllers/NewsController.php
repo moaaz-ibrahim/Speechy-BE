@@ -20,6 +20,21 @@ class NewsController extends Controller
         }
         return $this->sendResponse($response);
     }
+    public function getFeaturedNews(Request $request ){
+        $response = $this->service->getFeaturedNews($request);
+        if (!$response['success']) {
+            return $this->sendError($response);
+        }
+        return $this->sendResponse($response);
+    }
+
+    public function getMainNews(){
+        $response = $this->service->getMainNews();
+        if (!$response['success']) {
+            return $this->sendError($response);
+        }
+        return $this->sendResponse($response);   
+    }
     public function storeToDb(Request $request ){
         $response = $this->service->storeToDb($request);
         if (!$response['success']) {

@@ -11,7 +11,9 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 Route::get('/store-todb' , [NewsController::class , 'storeToDb'])->name('news,storeToDb');
-Route::get('/get-one-news', [NewsController::class,'getOneNews'])->name('news.getOne');
+Route::get('/one-news', [NewsController::class,'getOneNews'])->name('news.getOne');
+Route::get('/featured-news', [NewsController::class,'getFeaturedNews'])->name('news.getFeatured');
+// Route::get('/')
 
 //Testing purpose
 Route::post('scrapePageData',[ScrapperController::class, 'scrapePage'])->name('api.scrapePageData');

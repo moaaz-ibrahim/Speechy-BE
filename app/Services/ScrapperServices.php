@@ -120,13 +120,14 @@ class ScrapperServices
             ];
             $article = Article::where('title', $title)->first();
             if (!$article) {
-
+                // dd('s');
                 Article::create([
                     'title' => $title,
                     'original_url' => $url,
                     'image' => $imgSrc,
                     'news_company_id' => 1,
                 ]);
+                // dd('s');
             }
         }
         $allArticles = Article::select('articles.image as img', 'articles.title', 'articles.original_url as url', 'news_companies.name as platform')
@@ -195,9 +196,14 @@ class ScrapperServices
             // $alqurooshPosts = $this->scrapeAlquroosh();
             // dd($alqurooshPosts);
             $jawlahPosts = $this->scrapeJawlah();
+            $allArticles = Article::select('articles.image as img', 'articles.title', 'articles.original_url as url', 'news_companies.name as platform')
+        ->join('news_companies', 'articles.news_company_id', '=', 'news_companies.id')
+        ->orderBy('articles.created_at', 'desc')
+            ->get();
+        
 
 
-            $posts = $jawlahPosts;
+            $posts = $allArticles;
 
             // Return success with the scraped data
             return ['success' => true, 'data' => $posts];

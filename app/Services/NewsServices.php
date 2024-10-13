@@ -37,6 +37,10 @@ class NewsServices
                 if (!file_exists($fullFolderPath)) {
                     foreach($newsData['text'] as $news){
                         $voiceData = $voice->generateVoice($articelTitle,$part, $news);
+                        if(!$voiceData['success']){
+                            throw new Exception($voiceData['message']);
+                        }
+
                         $part++;
                     }
                 }
@@ -56,6 +60,39 @@ class NewsServices
             //throw $th;
             return ['success' => false,'message' => $e->getMessage()];
         }
+    }
+
+    public function getFeaturedNews($request){
+        try {
+            $data  = Article::select('articles.image', 'articles.title', 'articles.original_url as url')
+            ->where('featured', true)
+            ->orderBy('created_at', 'desc')
+            ->get();
+            return ['success' => true, 'data' => $data];
+            //code...
+        } catch (Exception $e) {
+            //throw $th;
+            return ['success' => false,'message' => $e->getMessage()];
+        }
+    }
+
+    public function getMainNews(){
+        try {
+            $allArticles = Article::select('articles.image as img', 'articles.title', 'articles.original_url as url', 'news_companies.name as platform')
+            ->join('news_companies', 'articles.news_company_id', '=', 'news_companies.id')
+            ->orderBy('articles.created_at', 'desc')
+                ->get();
+            
+    
+    
+                $posts = $allArticles;
+    
+                // Return success with the scraped data
+                return ['success' => true, 'data' => $posts];
+            } catch (Exception $e) {
+                // Return error if something goes wrong
+                return ['success' => false, 'error' => $e->getMessage()];
+            }
     }
     
     public function storeToDb($request){

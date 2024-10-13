@@ -26,6 +26,8 @@ class VoiceServices
             'language_code' => 'ar',
             'text' => $text,
         ]);
+        if(!$response->successful())
+        throw new Exception($response['detail']['message']);
 
         // Check if the request was successful
         if ($response->successful()) {
